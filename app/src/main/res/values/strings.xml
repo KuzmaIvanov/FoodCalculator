@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Food Calculator</string>
+    <string name="my_recipes_label">My Recipes</string>
+    <string name="search_label">Search</string>
+    <string name="create_label">Create</string>
+    <string name="my_garden_label">My Garden</string>
+    <string name="profile_label">Profile</string>
+</resources>
