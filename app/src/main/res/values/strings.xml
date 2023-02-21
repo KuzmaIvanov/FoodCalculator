@@ -5,4 +5,8 @@
     <string name="create_label">Create</string>
     <string name="my_garden_label">My Garden</string>
     <string name="profile_label">Profile</string>
+    
+    <string name="plants_search_screen">Plants Search</string>
+    <string name="plants_search_view_hint">Plants…</string>
+    <string name="filter_button_content_desc">Filter button</string>
 </resources>
