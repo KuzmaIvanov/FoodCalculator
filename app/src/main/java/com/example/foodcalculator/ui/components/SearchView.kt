@@ -2,34 +2,38 @@ package com.example.foodcalculator.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.foodcalculator.R
-import com.example.foodcalculator.ui.theme.FoodCalculatorTheme
 
 @Composable
-fun SearchView(hint: String) {
+fun SearchView(
+    hint: String,
+    navController: NavController,
+    onSearch: (String) -> Unit
+) {
     Row {
         SearchBar(
             hint = hint,
             modifier = Modifier
-                .weight(1f)
-        )
+                .weight(1f),
+            onSearch = onSearch
+        ) {
+            navController.navigateUp()
+        }
         Spacer(modifier = Modifier
             .width(8.dp))
         FiltersButton(
@@ -45,7 +49,8 @@ fun SearchView(hint: String) {
 fun SearchBar(
     modifier: Modifier = Modifier,
     hint: String = "",
-    onSearch: (String) -> Unit = {}
+    onSearch: (String) -> Unit = {},
+    onNavigateUp: () -> Unit
 ) {
     var text by remember {
         mutableStateOf("")
@@ -58,17 +63,24 @@ fun SearchBar(
             value = text,
             onValueChange = {
                 text = it
-                //onSearch(it)
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    if(text.isNotEmpty()) {
+                        onSearch(text)
+                    }
+                }
+            ),
             maxLines = 1,
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(5.dp, RoundedCornerShape(16.dp))
                 .background(Color.White, RoundedCornerShape(16.dp))
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+                .padding(horizontal = 40.dp, vertical = 14.dp)
                 .onFocusChanged {
-                    isHintDisplayed = it.isFocused != true
+                    isHintDisplayed = it.isFocused != true && text.isNotEmpty()
                 }
         )
         if(isHintDisplayed) {
@@ -76,7 +88,14 @@ fun SearchBar(
                 text = hint,
                 color = Color.LightGray,
                 modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 12.dp)
+                    .padding(horizontal = 40.dp, vertical = 12.dp)
+            )
+        }
+        IconButton(onClick = onNavigateUp) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow_back),
+                contentDescription = null,
+                tint = Color.LightGray
             )
         }
     }

@@ -9,4 +9,7 @@
     <string name="plants_search_screen">Plants Search</string>
     <string name="plants_search_view_hint">Plants…</string>
     <string name="filter_button_content_desc">Filter button</string>
+
+    <string name="action_get_all_plants">Get all plants</string>
+    <string name="add_a_new_plant">More plant</string>
 </resources>
