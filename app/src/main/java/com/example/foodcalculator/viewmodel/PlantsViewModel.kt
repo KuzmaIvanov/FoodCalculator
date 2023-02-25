@@ -3,6 +3,7 @@ package com.example.foodcalculator.viewmodel
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,6 +22,9 @@ class PlantsViewModel @Inject constructor(
     private val _plants = listOf<Plant>().toMutableStateList()
     val plants: List<Plant>
         get() = _plants
+
+    val showDialog = mutableStateOf(false)
+
     init {
         getPlants()
     }
