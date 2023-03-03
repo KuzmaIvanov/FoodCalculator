@@ -12,4 +12,11 @@
 
     <string name="action_get_all_plants">Get all plants</string>
     <string name="add_a_new_plant">More plant</string>
+
+    <string name="assist_chip_text_yes">Yes</string>
+    <string name="assist_chip_text_no">No</string>
+    <string name="is_species_edible">Is the species edible?</string>
+
+    <string name="filter_plant_screen">Filter plants</string>
+    <string name="action_apply">APPLY</string>
 </resources>

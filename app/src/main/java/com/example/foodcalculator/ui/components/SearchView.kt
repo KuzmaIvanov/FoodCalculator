@@ -82,7 +82,7 @@ fun SearchBar(
                 .background(Color.White, RoundedCornerShape(16.dp))
                 .padding(horizontal = 40.dp, vertical = 14.dp)
                 .onFocusChanged {
-                    isHintDisplayed = it.isFocused != true && text.isNotEmpty()
+                    isHintDisplayed = it.isFocused != true
                 }
         )
         if(isHintDisplayed) {

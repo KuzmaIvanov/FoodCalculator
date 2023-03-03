@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.foodcalculator.ui.screens.FilterPlantScreen
 import com.example.foodcalculator.ui.screens.MyGardenScreen
 import com.example.foodcalculator.ui.screens.PlantsSearchScreen
 import com.example.foodcalculator.viewmodel.PlantsViewModel
@@ -58,6 +59,7 @@ fun Navigation() {
             }
         }
     ) { innerPadding ->
+        val plantsViewModel = hiltViewModel<PlantsViewModel>()
         NavHost(
             navController = navController,
             startDestination = Screen.MyRecipes.route,
@@ -79,8 +81,10 @@ fun Navigation() {
                 Text(text = "This is a Profile Page")
             }
             composable(Screen.AddPlant.route) {
-                val plantsViewModel = hiltViewModel<PlantsViewModel>()
                 PlantsSearchScreen(navController = navController, plantsViewModel = plantsViewModel)
+            }
+            composable(Screen.FilterPlant.route) {
+                FilterPlantScreen(navController = navController)
             }
         }
     }

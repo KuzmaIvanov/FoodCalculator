@@ -15,4 +15,5 @@ sealed class Screen(
     object MyGarden: Screen("MyGarden", R.string.my_garden_label, R.drawable.ic_my_garden)
     object Profile: Screen("Profile", R.string.profile_label, R.drawable.ic_profile)
     object AddPlant: Screen("AddPlant", null, null)
+    object FilterPlant: Screen("FilterPlant", null, null)
 }
