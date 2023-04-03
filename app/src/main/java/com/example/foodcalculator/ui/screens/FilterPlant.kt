@@ -1,8 +1,7 @@
 package com.example.foodcalculator.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -13,10 +12,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodcalculator.R
 import com.example.foodcalculator.ui.components.FilterDropdownItem
+import com.example.foodcalculator.viewmodel.PlantsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterPlantScreen(navController: NavController) {
+fun FilterPlantScreen(navController: NavController, plantsViewModel: PlantsViewModel) {
+    var plantName by rememberSaveable {
+        mutableStateOf("")
+    }
     Scaffold(
         topBar = {
             SmallTopAppBar(
@@ -26,12 +29,18 @@ fun FilterPlantScreen(navController: NavController) {
                     )
                 },
                 navigationIcon = {
+                    /*нужно еще не забыть сделать reset*/
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(painter = painterResource(id = R.drawable.ic_cancel), contentDescription = null)
                     }
                 },
                 actions = {
-                    TextButton(onClick = {  }) {
+                    TextButton(onClick = {
+                        if(plantName.isEmpty()) {
+                            plantsViewModel.getFilterPlants()
+                            navController.navigateUp()
+                        }
+                    }) {
                         Text(text = stringResource(id = R.string.action_apply))
                     }
                 }
@@ -41,13 +50,9 @@ fun FilterPlantScreen(navController: NavController) {
             Surface(modifier = Modifier.padding(innerPadding)) {
                 Column(
                     modifier = Modifier
-                        .verticalScroll(rememberScrollState())
                         .padding(16.dp)
                         .fillMaxSize()
                 ) {
-                    var plantName by rememberSaveable {
-                        mutableStateOf("")
-                    }
                     OutlinedTextField(
                         value = plantName,
                         onValueChange = {
@@ -59,15 +64,26 @@ fun FilterPlantScreen(navController: NavController) {
                             .fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    FilterDropdownItem(
-                        text = "Edible parts",
-                        listOfFilterItems = listOf("fruits", "leaves", "roots")
-                    )
-                    Divider()
-                    FilterDropdownItem(
-                        text = "Bloom months",
-                        listOfFilterItems = listOf("may", "august", "july")
-                    )
+                    LazyColumn {
+                        item {
+                            FilterDropdownItem(
+                                text = "Edible parts",
+                                listOfFilterItems = plantsViewModel.statesOfEdibleParts
+                            )
+                        }
+                        item {
+                            FilterDropdownItem(
+                                text = "Bloom months",
+                                listOfFilterItems = plantsViewModel.statesOfBloomMonths
+                            )
+                        }
+                        item {
+                            FilterDropdownItem(
+                                text = "Fruit color",
+                                listOfFilterItems = plantsViewModel.statesOfFruitColors
+                            )
+                        }
+                    }
                 }
             }
         }

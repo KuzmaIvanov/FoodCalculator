@@ -47,7 +47,7 @@ fun PlantCard(plantCommonName: String, plantFamily: String, imageUrl: String) {
             modifier = Modifier
                 .height(125.dp)
                 .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(16.dp))
+                .clip(shape = RoundedCornerShape(16.dp)) //может внутри GlideImage есть параметр для дефолтной картинки
         )
         Column(
             modifier = Modifier

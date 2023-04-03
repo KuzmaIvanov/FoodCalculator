@@ -84,7 +84,7 @@ fun Navigation() {
                 PlantsSearchScreen(navController = navController, plantsViewModel = plantsViewModel)
             }
             composable(Screen.FilterPlant.route) {
-                FilterPlantScreen(navController = navController)
+                FilterPlantScreen(navController = navController, plantsViewModel = plantsViewModel)
             }
         }
     }
