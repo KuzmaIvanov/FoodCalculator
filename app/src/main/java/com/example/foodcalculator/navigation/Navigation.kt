@@ -75,7 +75,7 @@ fun Navigation() {
                 Text(text = "This is a Create Page")
             }
             composable(Screen.MyGarden.route) {
-                MyGardenScreen(navController = navController)
+                MyGardenScreen(navController = navController, plantsViewModel = plantsViewModel)
             }
             composable(Screen.Profile.route) {
                 Text(text = "This is a Profile Page")

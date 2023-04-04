@@ -27,8 +27,8 @@ interface PlantsApi {
     suspend fun getSearchFilterPlants(
         @Query("token") token: String,
         @Query("q") q: String,
-        @Query("filter[edible_part]") edibleParts: String,
-        @Query("filter[bloom_months]") bloomMonths: String,
-        @Query("filter[fruit_color]") fruitColors: String
+        @Query("filter[edible_part]") edibleParts: String?,
+        @Query("filter[bloom_months]") bloomMonths: String?,
+        @Query("filter[fruit_color]") fruitColors: String?
     ) : Plants
 }

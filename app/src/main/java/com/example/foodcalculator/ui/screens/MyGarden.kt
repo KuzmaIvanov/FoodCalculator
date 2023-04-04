@@ -13,10 +13,11 @@ import androidx.navigation.NavController
 import com.example.foodcalculator.R
 import com.example.foodcalculator.navigation.Screen
 import com.example.foodcalculator.ui.components.ApplicationTopAppbar
+import com.example.foodcalculator.viewmodel.PlantsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyGardenScreen(navController: NavController) {
+fun MyGardenScreen(navController: NavController, plantsViewModel: PlantsViewModel) {
     Scaffold(
         topBar = {
             ApplicationTopAppbar(title = stringResource(id = R.string.my_garden_label))
@@ -24,6 +25,7 @@ fun MyGardenScreen(navController: NavController) {
         floatingActionButton = {
             AddPlantFloatingActionButton {
                 navController.navigate(Screen.AddPlant.route)
+                plantsViewModel.getPlants()
             }
         },
         floatingActionButtonPosition = FabPosition.End,

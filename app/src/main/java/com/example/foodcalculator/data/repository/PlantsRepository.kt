@@ -17,8 +17,8 @@ class PlantsRepository(
     suspend fun getSearchFilterPlants(
         token: String,
         q: String,
-        edibleParts: String,
-        bloomMonths: String,
-        fruitColors: String
+        edibleParts: String?,
+        bloomMonths: String?,
+        fruitColors: String?
     ) = plantsApi.getSearchFilterPlants(token, q, edibleParts, bloomMonths, fruitColors)
 }

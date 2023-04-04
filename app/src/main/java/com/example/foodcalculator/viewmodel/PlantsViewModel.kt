@@ -1,6 +1,7 @@
 package com.example.foodcalculator.viewmodel
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
@@ -33,13 +34,11 @@ class PlantsViewModel @Inject constructor(
     private val listOfFruitColors = listOf("red", "green", "blue", "yellow", "green")
     val statesOfFruitColors = getFilterStatesAsMutableStateList(listOfFruitColors)
 
-    init {
-        getPlants()
-    }
-    private fun getPlants() {
+    fun getPlants() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val plantsObject = plantsRepository.getPlants(Constants.PLANTS_ACCESS_TOKEN)
+                _plants.clear()
                 plantsObject.plants.forEach { _plants.add(it) }
             } catch (e: Exception) {
                 Toast.makeText(appContext, "Failed to load all plants!", Toast.LENGTH_SHORT).show()
@@ -54,7 +53,6 @@ class PlantsViewModel @Inject constructor(
                 _plants.clear()
                 plantsObject.plants.forEach { _plants.add(it) }
             } catch (e: Exception) {
-                //Log.d("FAILED TO FIND", "FAILED ${e.message}")
                 Toast.makeText(appContext, "Failed to find plants!", Toast.LENGTH_SHORT).show()
             }
         }
@@ -77,7 +75,25 @@ class PlantsViewModel @Inject constructor(
                 plantsObject.plants.forEach { _plants.add(it) }
                 //возможно еще придется обновить statesOf на false все, посмотреть как в других прилажках
             } catch (e: Exception) {
-                Toast.makeText(appContext, "Failed to find plants (with filters)!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(appContext.applicationContext, "Failed to find plants (with filters)!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun getSearchFilterPlants(q: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val plantsObject = plantsRepository.getSearchFilterPlants(
+                    Constants.PLANTS_ACCESS_TOKEN,
+                    q,
+                    getFilterArgumentsAsString(statesOfEdibleParts),
+                    getFilterArgumentsAsString(statesOfBloomMonths),
+                    getFilterArgumentsAsString(statesOfFruitColors)
+                )
+                _plants.clear()
+                plantsObject.plants.forEach { _plants.add(it) }
+            } catch (e: Exception) {
+                Log.d("ERROR", "You must enter all fields!")
             }
         }
     }

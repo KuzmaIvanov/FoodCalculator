@@ -38,8 +38,10 @@ fun FilterPlantScreen(navController: NavController, plantsViewModel: PlantsViewM
                     TextButton(onClick = {
                         if(plantName.isEmpty()) {
                             plantsViewModel.getFilterPlants()
-                            navController.navigateUp()
+                        } else {
+                            plantsViewModel.getSearchFilterPlants(plantName)
                         }
+                        navController.navigateUp()
                     }) {
                         Text(text = stringResource(id = R.string.action_apply))
                     }
