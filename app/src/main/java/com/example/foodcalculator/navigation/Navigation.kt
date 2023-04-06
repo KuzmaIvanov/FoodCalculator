@@ -17,7 +17,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.foodcalculator.ui.screens.FilterPlantScreen
 import com.example.foodcalculator.ui.screens.MyGardenScreen
 import com.example.foodcalculator.ui.screens.PlantsSearchScreen
+import com.example.foodcalculator.ui.screens.RecipesSearchScreen
 import com.example.foodcalculator.viewmodel.PlantsViewModel
+import com.example.foodcalculator.viewmodel.RecipesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,6 +62,7 @@ fun Navigation() {
         }
     ) { innerPadding ->
         val plantsViewModel = hiltViewModel<PlantsViewModel>()
+        val recipesViewModel = hiltViewModel<RecipesViewModel>()
         NavHost(
             navController = navController,
             startDestination = Screen.MyRecipes.route,
@@ -69,7 +72,7 @@ fun Navigation() {
                 Text(text = "This is a My Recipes Page")
             }
             composable(Screen.Search.route) {
-                Text(text = "This is a Search Page")
+                RecipesSearchScreen(navController = navController, recipesViewModel = recipesViewModel)
             }
             composable(Screen.Create.route) {
                 Text(text = "This is a Create Page")
