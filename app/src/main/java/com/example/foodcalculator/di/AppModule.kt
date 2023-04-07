@@ -1,7 +1,7 @@
 package com.example.foodcalculator.di
 
 import com.example.foodcalculator.data.remote.plants.PlantsApi
-import com.example.foodcalculator.data.repository.RecipesApi
+import com.example.foodcalculator.data.remote.recipes.RecipesApi
 import com.example.foodcalculator.data.repository.PlantsRepository
 import com.example.foodcalculator.data.repository.RecipesRepository
 import com.example.foodcalculator.other.Constants

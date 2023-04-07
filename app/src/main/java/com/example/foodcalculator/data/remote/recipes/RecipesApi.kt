@@ -1,4 +1,4 @@
-package com.example.foodcalculator.data.repository
+package com.example.foodcalculator.data.remote.recipes
 
 import com.google.gson.JsonObject
 import retrofit2.http.GET

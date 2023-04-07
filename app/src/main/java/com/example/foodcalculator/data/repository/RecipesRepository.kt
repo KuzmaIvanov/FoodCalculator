@@ -1,5 +1,7 @@
 package com.example.foodcalculator.data.repository
 
+import com.example.foodcalculator.data.remote.recipes.RecipesApi
+
 class RecipesRepository(
     private val recipesApi: RecipesApi
 ) {
