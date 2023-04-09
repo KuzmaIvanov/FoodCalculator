@@ -16,4 +16,5 @@ sealed class Screen(
     object Profile: Screen("Profile", R.string.profile_label, R.drawable.ic_profile)
     object AddPlant: Screen("AddPlant", null, null)
     object FilterPlant: Screen("FilterPlant", null, null)
+    object FilterRecipe: Screen("FilterRecipe", null, null)
 }

@@ -14,10 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.foodcalculator.ui.screens.FilterPlantScreen
-import com.example.foodcalculator.ui.screens.MyGardenScreen
-import com.example.foodcalculator.ui.screens.PlantsSearchScreen
-import com.example.foodcalculator.ui.screens.RecipesSearchScreen
+import com.example.foodcalculator.ui.screens.*
 import com.example.foodcalculator.viewmodel.PlantsViewModel
 import com.example.foodcalculator.viewmodel.RecipesViewModel
 
@@ -88,6 +85,9 @@ fun Navigation() {
             }
             composable(Screen.FilterPlant.route) {
                 FilterPlantScreen(navController = navController, plantsViewModel = plantsViewModel)
+            }
+            composable(Screen.FilterRecipe.route) {
+                FilterRecipeScreen(navController = navController, recipesViewModel = recipesViewModel)
             }
         }
     }

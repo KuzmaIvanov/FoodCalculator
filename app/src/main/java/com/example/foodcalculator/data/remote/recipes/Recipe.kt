@@ -11,5 +11,6 @@ data class Recipe(
     val totalTime: Int,
     val cuisineType: List<String>,
     val mealType: List<String>,
-    val dishType: List<String>
+    val dishType: List<String>,
+    val yield: Int
 )

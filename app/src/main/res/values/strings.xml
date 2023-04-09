@@ -19,4 +19,7 @@
 
     <string name="filter_plant_screen">Filter plants</string>
     <string name="action_apply">APPLY</string>
+
+    <string name="recipes_search_screen">Recipes Search</string>
+    <string name="recipes_search_view_hint">Recipes…</string>
 </resources>

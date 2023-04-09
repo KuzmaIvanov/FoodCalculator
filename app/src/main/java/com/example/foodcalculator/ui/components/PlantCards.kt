@@ -17,7 +17,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.foodcalculator.data.remote.plants.Plant
 
 @Composable
-fun Cards(plants: List<Plant>) {
+fun PlantCards(plants: List<Plant>) {
     LazyColumn {
         items(plants) {
             val commonName = it.commonName ?: ""

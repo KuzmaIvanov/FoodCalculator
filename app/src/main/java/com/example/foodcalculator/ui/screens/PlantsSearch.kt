@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodcalculator.R
 import com.example.foodcalculator.navigation.Screen
-import com.example.foodcalculator.ui.components.Cards
+import com.example.foodcalculator.ui.components.PlantCards
 import com.example.foodcalculator.ui.components.SearchView
 import com.example.foodcalculator.viewmodel.PlantsViewModel
 
@@ -38,6 +38,6 @@ fun PlantsSearchScreen(
             }
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Cards(plants = plantsViewModel.plants)
+        PlantCards(plants = plantsViewModel.plants)
     }
 }

@@ -21,14 +21,15 @@ class RecipesViewModel @Inject constructor(
     val recipes: List<Recipe>
         get() = _recipes
 
-    fun getRecipes() {
+    fun getRecipes(q: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resultJsonObject = recipesRepository.getRecipes(
-                    q = "Chicken",
+                    q = q,
                     appId = Constants.RECIPES_APP_ID,
                     appKey = Constants.RECIPES_APP_KEY
                 )
+                _recipes.clear()
                 initializeRecipesFromJsonObject(resultJsonObject)
             } catch (e: Exception) {
                 Log.d("ERROR", "ERROR in recipes req, ${e.message}")
@@ -58,7 +59,8 @@ class RecipesViewModel @Inject constructor(
                 totalTime = recipeAsJsonObject.get("totalTime").asInt,
                 cuisineType = jsonArrayOfStringFromJsonObjectToList(recipeAsJsonObject, "cuisineType"),
                 mealType = jsonArrayOfStringFromJsonObjectToList(recipeAsJsonObject, "mealType"),
-                dishType = jsonArrayOfStringFromJsonObjectToList(recipeAsJsonObject, "dishType")
+                dishType = jsonArrayOfStringFromJsonObjectToList(recipeAsJsonObject, "dishType"),
+                yield = recipeAsJsonObject.get("yield").asInt
             ))
         }
     }
