@@ -1,6 +1,7 @@
 package com.example.foodcalculator
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.foodcalculator.navigation.Navigation
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FoodCalculatorTheme {
-                Navigation()
+                Navigation(this)
             }
         }
     }

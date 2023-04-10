@@ -1,5 +1,6 @@
 package com.example.foodcalculator.navigation
 
+import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -20,7 +21,7 @@ import com.example.foodcalculator.viewmodel.RecipesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navigation() {
+fun Navigation(context: Context) {
     val navController = rememberNavController()
     val screens = listOf(
         Screen.MyRecipes,
@@ -87,7 +88,7 @@ fun Navigation() {
                 FilterPlantScreen(navController = navController, plantsViewModel = plantsViewModel)
             }
             composable(Screen.FilterRecipe.route) {
-                FilterRecipeScreen(navController = navController, recipesViewModel = recipesViewModel)
+                FilterRecipeScreen(navController = navController, recipesViewModel = recipesViewModel, context = context)
             }
         }
     }
