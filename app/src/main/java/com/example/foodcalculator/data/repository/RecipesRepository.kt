@@ -15,7 +15,33 @@ class RecipesRepository(
         cuisineType: Array<String>? = null,
         mealType: Array<String>? = null,
         dishType: Array<String>? = null,
-        calories: String? = null,
-        time: String? = null
-    ) = recipesApi.getRecipes(type, q, appId, appKey, diet, health, cuisineType, mealType, dishType, calories, time)
+        calories: String?,
+        time: String?,
+        sugar: String?,
+        protein: String?,
+        calcium: String?,
+        iron: String?,
+        phosphorus: String?,
+        vitaminC: String?,
+        vitaminA: String?
+    ) = recipesApi.getRecipes(
+        type,
+        q,
+        appId,
+        appKey,
+        diet,
+        health,
+        cuisineType,
+        mealType,
+        dishType,
+        calories,
+        time,
+        sugar,
+        protein,
+        calcium,
+        iron,
+        phosphorus,
+        vitaminC,
+        vitaminA
+    )
 }

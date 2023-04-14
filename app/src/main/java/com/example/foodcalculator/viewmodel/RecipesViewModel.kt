@@ -123,7 +123,18 @@ class RecipesViewModel @Inject constructor(
     )
     val statesOfDishType = getFilterStatesAsMutableStateList(listOfDishType)
 
-    fun getRecipes(q: String) {
+    fun getRecipes(
+        q: String,
+        calories: String? = null,
+        time: String? = null,
+        sugar: String? = null,
+        protein: String? = null,
+        calcium: String? = null,
+        iron: String? = null,
+        phosphorus: String? = null,
+        vitaminC: String? = null,
+        vitaminA: String? = null
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resultJsonObject = recipesRepository.getRecipes(
@@ -134,7 +145,16 @@ class RecipesViewModel @Inject constructor(
                     health = fromListOfFilterItemToArray(statesOfHealthLabels.filter { it.checked }),
                     cuisineType = fromListOfFilterItemToArray(statesOfCuisineType.filter { it.checked }),
                     mealType = fromListOfFilterItemToArray(statesOfCuisineType.filter { it.checked }),
-                    dishType = fromListOfFilterItemToArray(statesOfDishType.filter { it.checked })
+                    dishType = fromListOfFilterItemToArray(statesOfDishType.filter { it.checked }),
+                    calories = calories,
+                    time = time,
+                    sugar = sugar,
+                    protein = protein,
+                    calcium = calcium,
+                    iron = iron,
+                    phosphorus = phosphorus,
+                    vitaminC = vitaminC,
+                    vitaminA = vitaminA
                 )
                 _recipes.clear()
                 initializeRecipesFromJsonObject(resultJsonObject)

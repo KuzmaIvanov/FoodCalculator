@@ -15,22 +15,20 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.foodcalculator.data.remote.plants.Plant
+import com.example.foodcalculator.data.remote.plants.Plants
 
 @Composable
 fun PlantCards(plants: List<Plant>) {
     LazyColumn {
         items(plants) {
-            val commonName = it.commonName ?: ""
-            val family = it.family ?: ""
-            val imageUrl = it.imageUrl ?: "" //если imgUrl = null, то можно загрузить просто дефолтную картинку
-            PlantCard(plantCommonName = commonName, plantFamily = family, imageUrl = imageUrl)
+            PlantCard(it)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun PlantCard(plantCommonName: String, plantFamily: String, imageUrl: String) {
+fun PlantCard(plant: Plant) {
     Card(
         onClick = { },
         modifier = Modifier.size(width = 150.dp, height = 200.dp),
@@ -41,7 +39,7 @@ fun PlantCard(plantCommonName: String, plantFamily: String, imageUrl: String) {
         border = BorderStroke(width = 1.dp, color = Color.LightGray)
     ) {
         GlideImage(
-            model = imageUrl,
+            model = plant.imageUrl ?: "", //если imgUrl = null, то можно загрузить просто дефолтную картинку
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -53,8 +51,8 @@ fun PlantCard(plantCommonName: String, plantFamily: String, imageUrl: String) {
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            Text(text = plantCommonName)
-            Text(text = plantFamily)
+            Text(text = plant.commonName ?: "")
+            Text(text = plant.family ?: "")
         }
     }
 }
