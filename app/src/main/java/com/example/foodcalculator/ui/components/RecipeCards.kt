@@ -15,14 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.foodcalculator.data.remote.recipes.Recipe
 
 @Composable
 fun RecipeCards(recipes: List<Recipe>) {
-    LazyColumn {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         items(recipes) {
             RecipeCard(recipe = it)
         }
@@ -57,9 +56,9 @@ fun RecipeCard(recipe: Recipe) {
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(text = recipe.label,)
-                Text(text = "${recipe.yield} servings")
+                Text(text = "${recipe.yield ?: ""} servings")
                 Text(text = "Total weight: ${recipe.totalWeight} g")
-                if(recipe.totalTime != 0) {
+                if(recipe.totalTime != null && recipe.totalTime != 0) {
                     Text(text = "Total time: ${recipe.totalTime} min")
                 }
                 Text(text = "${recipe.calories} kcal")

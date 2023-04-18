@@ -1,11 +1,13 @@
 package com.example.foodcalculator.data.remote.recipes
 
 import com.google.gson.JsonObject
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface RecipesApi {
-    @GET("v2")
+    @GET("recipes/v2")
     suspend fun getRecipes(
         @Query("type") type: String,
         @Query("q") q: String,
@@ -25,5 +27,12 @@ interface RecipesApi {
         @Query("nutrients[P]") phosphorus: String?,
         @Query("nutrients[VITC]") vitaminC: String?,
         @Query("nutrients[VITA_RAE]") vitaminA: String?,
+    ): JsonObject
+
+    @POST("nutrition-details")
+    suspend fun getNutritionAnalysis(
+        @Query("app_id") appId: String,
+        @Query("app_key") appKey: String,
+        @Body recipePost: RecipePost
     ): JsonObject
 }

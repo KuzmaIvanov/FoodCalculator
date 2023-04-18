@@ -23,4 +23,10 @@
     <string name="recipes_search_screen">Recipes Search</string>
     <string name="recipes_search_view_hint">Recipes…</string>
     <string name="filter_recipe_screen">Filter plants</string>
+
+    <string name="create_recipe_screen_title">Create recipe</string>
+    <string name="action_save">SAVE</string>
+    <string name="recipe_title">Title</string>
+    <string name="recipe_title_textfield_hint">Give your recipe a name</string>
+    <string name="action_add_photo">Add photo</string>
 </resources>

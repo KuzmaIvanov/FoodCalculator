@@ -15,11 +15,10 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.foodcalculator.data.remote.plants.Plant
-import com.example.foodcalculator.data.remote.plants.Plants
 
 @Composable
 fun PlantCards(plants: List<Plant>) {
-    LazyColumn {
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         items(plants) {
             PlantCard(it)
         }

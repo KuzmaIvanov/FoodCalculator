@@ -8,9 +8,9 @@ data class Recipe(
     val ingredientLines: List<String>,
     val calories: Float,
     val totalWeight: Float,
-    val totalTime: Int,
+    val totalTime: Int? = null,
     val cuisineType: List<String>,
     val mealType: List<String>,
     val dishType: List<String>,
-    val yield: Int
+    val yield: Int? = null
 )

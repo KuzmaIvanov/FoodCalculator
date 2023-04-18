@@ -6,6 +6,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodcalculator.data.remote.recipes.Recipe
+import com.example.foodcalculator.data.remote.recipes.RecipePost
 import com.example.foodcalculator.data.repository.RecipesRepository
 import com.example.foodcalculator.other.Constants
 import com.example.foodcalculator.ui.components.FilterItem
@@ -204,5 +205,23 @@ class RecipesViewModel @Inject constructor(
             arrayList.add(it.label)
         }
         return if(arrayList.isEmpty()) null else arrayList.toTypedArray()
+    }
+
+    fun getNutritionAnalysis(recipePost: RecipePost): String {
+        return try {
+            var res = ""
+            viewModelScope.launch(Dispatchers.IO) {
+                val result = recipesRepository.getNutritionAnalysis(
+                    Constants.NUTRITION_ANALYSIS_APP_ID,
+                    Constants.NUTRITION_ANALYSIS_APP_KEY,
+                    recipePost
+                )
+                res = result.get("calories").asString
+                Log.d("NUTRITION AN. RESULT:", res)
+            }
+            res
+        } catch (e: Exception) {
+            e.message.toString()
+        }
     }
 }

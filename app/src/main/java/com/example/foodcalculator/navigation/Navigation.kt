@@ -73,7 +73,7 @@ fun Navigation(context: Context) {
                 RecipesSearchScreen(navController = navController, recipesViewModel = recipesViewModel)
             }
             composable(Screen.Create.route) {
-                Text(text = "This is a Create Page")
+                CreateRecipeScreen(recipesViewModel = recipesViewModel)
             }
             composable(Screen.MyGarden.route) {
                 MyGardenScreen(navController = navController, plantsViewModel = plantsViewModel)

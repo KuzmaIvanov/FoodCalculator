@@ -1,5 +1,6 @@
 package com.example.foodcalculator.data.repository
 
+import com.example.foodcalculator.data.remote.recipes.RecipePost
 import com.example.foodcalculator.data.remote.recipes.RecipesApi
 
 class RecipesRepository(
@@ -44,4 +45,10 @@ class RecipesRepository(
         vitaminC,
         vitaminA
     )
+
+    suspend fun getNutritionAnalysis(
+        appId: String,
+        appKey: String,
+        recipePost: RecipePost
+    ) = recipesApi.getNutritionAnalysis(appId, appKey, recipePost)
 }
