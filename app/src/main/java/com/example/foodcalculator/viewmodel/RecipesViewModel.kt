@@ -1,15 +1,18 @@
 package com.example.foodcalculator.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.foodcalculator.data.remote.recipes.NutritionAnalysis
 import com.example.foodcalculator.data.remote.recipes.Recipe
 import com.example.foodcalculator.data.remote.recipes.RecipePost
 import com.example.foodcalculator.data.repository.RecipesRepository
 import com.example.foodcalculator.other.Constants
 import com.example.foodcalculator.ui.components.FilterItem
+import com.example.foodcalculator.ui.screens.Ingredient
 import com.google.gson.JsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +26,9 @@ class RecipesViewModel @Inject constructor(
     private val _recipes = listOf<Recipe>().toMutableStateList()
     val recipes: List<Recipe>
         get() = _recipes
+
+    var nutritionAnalysis = mutableStateOf(NutritionAnalysis())
+    val listIngredients = listOf<Ingredient>().toMutableStateList()
 
     private val listOfDietLabels = listOf(
         "balanced",
@@ -176,7 +182,7 @@ class RecipesViewModel @Inject constructor(
 
     private fun initializeRecipesFromJsonObject(jsonObject: JsonObject) {
         val hits = jsonObject.getAsJsonArray("hits")
-        hits.forEach { it ->
+        hits.forEach {
             val recipeAsJsonObject = it.asJsonObject.getAsJsonObject("recipe")
             _recipes.add(Recipe(
                 label = recipeAsJsonObject.get("label").asString,
@@ -207,21 +213,35 @@ class RecipesViewModel @Inject constructor(
         return if(arrayList.isEmpty()) null else arrayList.toTypedArray()
     }
 
-    fun getNutritionAnalysis(recipePost: RecipePost): String {
-        return try {
-            var res = ""
+    fun getNutritionAnalysis(recipePost: RecipePost) {
+        try {
             viewModelScope.launch(Dispatchers.IO) {
-                val result = recipesRepository.getNutritionAnalysis(
+                val resultJsonObject = recipesRepository.getNutritionAnalysis(
                     Constants.NUTRITION_ANALYSIS_APP_ID,
                     Constants.NUTRITION_ANALYSIS_APP_KEY,
                     recipePost
                 )
-                res = result.get("calories").asString
-                Log.d("NUTRITION AN. RESULT:", res)
+                getInfoFromJsonObject(resultJsonObject)
             }
-            res
         } catch (e: Exception) {
-            e.message.toString()
+            Log.d("ERROR", e.message.toString())
         }
+    }
+    private fun getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject: JsonObject, elementName: String): String {
+        return totalNutrientsJsonObject.getAsJsonObject(elementName).get("quantity").asString
+    }
+    private fun getInfoFromJsonObject(jsonObject: JsonObject) {
+        val calories = jsonObject.get("calories").asString
+        val totalWeight = jsonObject.get("totalWeight").asString
+        val totalNutrientsJsonObject = jsonObject.getAsJsonObject("totalNutrients")
+        val fat = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "FAT")
+        val cholesterol = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "CHOLE")
+        val sodium = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "NA")
+        val protein = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "PROCNT")
+        val vitaminD = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "VITD")
+        val calcium = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "CA")
+        val iron = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "FE")
+        val potassium = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "K")
+        nutritionAnalysis.value = NutritionAnalysis(calories, totalWeight, fat, cholesterol, sodium, protein, vitaminD, calcium, iron, potassium)
     }
 }
