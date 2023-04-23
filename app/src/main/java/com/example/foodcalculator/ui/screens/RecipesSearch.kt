@@ -8,7 +8,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.foodcalculator.R
-import com.example.foodcalculator.data.remote.recipes.Recipe
 import com.example.foodcalculator.navigation.Screen
 import com.example.foodcalculator.ui.components.RecipeCards
 import com.example.foodcalculator.ui.components.SearchView
@@ -36,6 +35,9 @@ fun RecipesSearchScreen(navController: NavController, recipesViewModel: RecipesV
             }
         )
         Spacer(modifier = Modifier.height(8.dp))
-        RecipeCards(recipes = recipesViewModel.recipes)
+        RecipeCards(
+            recipes = recipesViewModel.recipes,
+            navController = navController
+        )
     }
 }

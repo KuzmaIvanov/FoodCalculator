@@ -29,4 +29,6 @@
     <string name="recipe_title">Title</string>
     <string name="recipe_title_textfield_hint">Give your recipe a name</string>
     <string name="action_add_photo">Add photo</string>
+
+    <string name="recipe_details_screen">Recipe details</string>
 </resources>

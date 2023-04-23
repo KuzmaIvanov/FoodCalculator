@@ -1,5 +1,6 @@
 package com.example.foodcalculator.ui.components
 
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,24 +16,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.foodcalculator.data.remote.recipes.Recipe
+import com.example.foodcalculator.navigation.Screen
+import com.google.gson.Gson
 
 @Composable
-fun RecipeCards(recipes: List<Recipe>) {
+fun RecipeCards(recipes: List<Recipe>, navController: NavController) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         items(recipes) {
-            RecipeCard(recipe = it)
+            RecipeCard(
+                recipe = it,
+                onCardClick = { recipe ->
+                    navController.navigate(
+                        Screen.RecipeDetails.route+"/recipe={recipe}"
+                            .replace(
+                                oldValue = "{recipe}",
+                                newValue = Uri.encode(Gson().toJson(recipe)))
+                    )
+                }
+            )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun RecipeCard(recipe: Recipe) {
+fun RecipeCard(recipe: Recipe, onCardClick: (Recipe) -> Unit) {
     Card(
-        onClick = {},
+        onClick = { onCardClick(recipe) },
         modifier = Modifier
             .height(150.dp)
             .fillMaxWidth(),
