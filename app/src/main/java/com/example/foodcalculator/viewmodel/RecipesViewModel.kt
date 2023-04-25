@@ -187,6 +187,7 @@ class RecipesViewModel @Inject constructor(
             _recipes.add(Recipe(
                 label = recipeAsJsonObject.get("label").asString,
                 imageUrl = recipeAsJsonObject.get("image").asString,
+                //imageUrl = recipeAsJsonObject.getAsJsonObject("images").getAsJsonObject("LARGE").get("url").asString,
                 dietLabels = jsonArrayOfStringFromJsonObjectToList(recipeAsJsonObject, "dietLabels"),
                 healthLabels = jsonArrayOfStringFromJsonObjectToList(recipeAsJsonObject, "healthLabels"),
                 ingredientLines = jsonArrayOfStringFromJsonObjectToList(recipeAsJsonObject, "ingredientLines"),

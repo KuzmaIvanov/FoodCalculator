@@ -104,6 +104,18 @@ fun Navigation(context: Context) {
                     recipeAsJson = it.arguments?.getString("recipe")!!
                 )
             }
+            composable(
+                route = Screen.PlantDetails.route+"/plant={plant}",
+                arguments = listOf(navArgument("plant") {
+                    type = NavType.StringType
+                    nullable = false
+                })
+            ) {
+                PlantDetailsScreen(
+                    navController = navController,
+                    plantAsJson = it.arguments?.getString("plant")!!
+                )
+            }
         }
     }
 }

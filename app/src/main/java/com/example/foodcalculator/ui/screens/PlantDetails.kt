@@ -1,6 +1,7 @@
 package com.example.foodcalculator.ui.screens
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -14,19 +15,19 @@ import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.foodcalculator.R
-import com.example.foodcalculator.data.remote.recipes.Recipe
+import com.example.foodcalculator.data.remote.plants.Plant
 import com.google.gson.Gson
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun RecipeDetailsScreen(navController: NavController, recipeAsJson: String) {
-    val recipe = Gson().fromJson(recipeAsJson, Recipe::class.java)
+fun PlantDetailsScreen(navController: NavController, plantAsJson: String) {
+    val plant = Gson().fromJson(plantAsJson, Plant::class.java)
     Scaffold(
         topBar = {
             SmallTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(id = R.string.recipe_details_screen)
+                        text = stringResource(id = R.string.plant_details_screen)
                     )
                 },
                 navigationIcon = {
@@ -50,36 +51,20 @@ fun RecipeDetailsScreen(navController: NavController, recipeAsJson: String) {
                         .verticalScroll(rememberScrollState())
                 ) {
                     GlideImage(
-                        model = recipe.imageUrl,
+                        model = plant.imageUrl,
                         contentDescription = null,
                         contentScale = ContentScale.FillWidth
                     )
-                    Text(text = recipe.label)
-                    Text(text = "Total calories: ${recipe.calories}")
-                    Text(text = "Total weight: ${recipe.totalWeight}")
-                    Text(text = "Total time: ${recipe.totalTime ?: "empty"}")
-                    Text(text = "Servings: ${recipe.yield ?: "empty"}")
-                    ShowListOfString(name = "Ingredients", list = recipe.ingredientLines)
-                    ShowListOfString(name = "Diet", list = recipe.dietLabels)
-                    ShowListOfString(name = "Health", list = recipe.healthLabels)
-                    ShowListOfString(name = "Cuisine type", list = recipe.cuisineType)
-                    ShowListOfString(name = "Meal type", list = recipe.mealType)
-                    ShowListOfString(name = "Dish type", list = recipe.dishType)
+                    Text(text = plant.commonName ?: "")
+                    Text(text = "Family: ${plant.family ?: ""}")
+                    Text(text = "Family common name: ${plant.familyCommonName}")
+                    Text(text = "Scientific name: ${plant.scientificName}")
+                    ShowListOfString(name = "Synonyms", list = plant.synonyms ?: listOf())
+                    if(plant.author != null && plant.year != null) {
+                        Text(text = "Author is ${plant.author}, found in ${plant.year}")
+                    }
                 }
             }
         }
     )
-}
-
-@Composable
-fun ShowListOfString(name: String, list: List<String>) {
-    Text(text = "$name:")
-    Column(
-        modifier = Modifier
-            .padding(8.dp)
-    ) {
-        list.forEach {
-            Text(text = it)
-        }
-    }
 }
