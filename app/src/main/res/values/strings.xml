@@ -32,4 +32,6 @@
 
     <string name="recipe_details_screen">Recipe details</string>
     <string name="plant_details_screen">Plant details</string>
+
+    <string name="web_client_id">36579553534-174a0dviiuqr10jel4a1adjkl9onqp7f.apps.googleusercontent.com</string>
 </resources>

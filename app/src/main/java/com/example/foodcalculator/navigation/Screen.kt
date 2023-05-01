@@ -19,4 +19,5 @@ sealed class Screen(
     object FilterRecipe: Screen("FilterRecipe", null, null)
     object RecipeDetails: Screen("RecipeDetails", null, null)
     object PlantDetails: Screen("PlantDetails", null, null)
+    object SignIn: Screen("SignIn", null, null)
 }
