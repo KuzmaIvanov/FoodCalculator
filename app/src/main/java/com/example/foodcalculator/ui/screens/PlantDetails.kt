@@ -1,5 +1,6 @@
 package com.example.foodcalculator.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -16,11 +17,18 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.foodcalculator.R
 import com.example.foodcalculator.data.remote.plants.Plant
+import com.example.foodcalculator.viewmodel.PlantsViewModel
 import com.google.gson.Gson
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun PlantDetailsScreen(navController: NavController, plantAsJson: String) {
+fun PlantDetailsScreen(
+    navController: NavController,
+    plantAsJson: String,
+    userId: String,
+    plantsViewModel: PlantsViewModel,
+    context: Context
+) {
     val plant = Gson().fromJson(plantAsJson, Plant::class.java)
     Scaffold(
         topBar = {
@@ -39,7 +47,12 @@ fun PlantDetailsScreen(navController: NavController, plantAsJson: String) {
                     }
                 },
                 actions = {
-
+                    IconButton(onClick = { plantsViewModel.savePlantToFireStore(userId, plant) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_add_no_circle),
+                            contentDescription = null
+                        )
+                    }
                 }
             )
         },

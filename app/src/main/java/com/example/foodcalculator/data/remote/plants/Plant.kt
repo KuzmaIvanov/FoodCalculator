@@ -10,7 +10,7 @@ data class Plant(
     @Json(name = "family_common_name") val familyCommonName: String?,
     val genus: String?,
     @Json(name = "genus_id") val genusId: Int?,
-    val id: Int?,
+    val id: Int,
     @Json(name = "image_url") val imageUrl: String?,
     val links: Links?,
     val rank: String?,

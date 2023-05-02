@@ -36,7 +36,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navigation(context: Context, scope: LifecycleCoroutineScope, googleAuthUiClient: GoogleAuthUiClient) {
+fun Navigation(
+    context: Context,
+    scope: LifecycleCoroutineScope,
+    googleAuthUiClient: GoogleAuthUiClient
+) {
     val navController = rememberNavController()
     val screens = listOf(
         Screen.MyRecipes,
@@ -143,7 +147,11 @@ fun Navigation(context: Context, scope: LifecycleCoroutineScope, googleAuthUiCli
                 CreateRecipeScreen(recipesViewModel = recipesViewModel)
             }
             composable(Screen.MyGarden.route) {
-                MyGardenScreen(navController = navController, plantsViewModel = plantsViewModel)
+                MyGardenScreen(
+                    navController = navController,
+                    plantsViewModel = plantsViewModel,
+                    userId = googleAuthUiClient.getSignedInUser()?.userId!!
+                )
             }
             composable(Screen.Profile.route) {
                 ProfileScreen(
@@ -187,7 +195,10 @@ fun Navigation(context: Context, scope: LifecycleCoroutineScope, googleAuthUiCli
             ) {
                 PlantDetailsScreen(
                     navController = navController,
-                    plantAsJson = it.arguments?.getString("plant")!!
+                    plantAsJson = it.arguments?.getString("plant")!!,
+                    googleAuthUiClient.getSignedInUser()?.userId!!,
+                    plantsViewModel,
+                    context
                 )
             }
         }
