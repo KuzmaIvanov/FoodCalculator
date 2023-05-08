@@ -27,10 +27,6 @@ class PlantsViewModel @Inject constructor(
     val plants: List<Plant>
         get() = _plants
 
-    private val _gardenPlants = listOf<Plant>().toMutableStateList()
-    val gardenPlants: List<Plant>
-        get() = _gardenPlants
-
     /*Подумать над тем, как можно вынести явное определение списка фильтров из ViewModel, может в values*/
     private val listOfEdibleParts = listOf("fruits", "leaves", "roots", "flowers", "seeds", "stem")
     val statesOfEdibleParts = getFilterStatesAsMutableStateList(listOfEdibleParts)
@@ -143,16 +139,16 @@ class PlantsViewModel @Inject constructor(
         }
     }
 
-    fun getGardenPlants(userId: String) {
+    fun getGardenPlants(userId: String): SnapshotStateList<Plant> {
+        val gardenPlants = listOf<Plant>().toMutableStateList()
         firestore.collection("users")
             .document(userId)
             .collection("plants")
             .get()
             .addOnSuccessListener { result ->
-                _gardenPlants.clear()
                 for(document in result) {
                     val plant = document.data
-                    _gardenPlants.add(
+                    gardenPlants.add(
                         Plant(
                             author = plant["author"].toString(),
                             bibliography = null,
@@ -177,6 +173,21 @@ class PlantsViewModel @Inject constructor(
             .addOnFailureListener {
                 Log.d("FIRESTORE", "Failed to load data")
             }
+        return gardenPlants
     }
 
+    fun deleteGardenPlant(userId: String, plantId: Int) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                firestore.collection("users")
+                    .document(userId)
+                    .collection("plants")
+                    .document(plantId.toString())
+                    .delete()
+                    .await()
+            }
+        } catch (e: Exception) {
+            Log.d("FIRESTORE", "Failed to delete plant")
+        }
+    }
 }

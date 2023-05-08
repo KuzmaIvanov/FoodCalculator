@@ -27,7 +27,8 @@ fun PlantDetailsScreen(
     plantAsJson: String,
     userId: String,
     plantsViewModel: PlantsViewModel,
-    context: Context
+    context: Context,
+    fromGarden: Boolean
 ) {
     val plant = Gson().fromJson(plantAsJson, Plant::class.java)
     Scaffold(
@@ -47,11 +48,23 @@ fun PlantDetailsScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { plantsViewModel.savePlantToFireStore(userId, plant) }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_add_no_circle),
-                            contentDescription = null
-                        )
+                    if(fromGarden) {
+                        IconButton(onClick = {
+                            plantsViewModel.deleteGardenPlant(userId, plant.id)
+                            navController.navigateUp()
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cancel),
+                                contentDescription = null
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = { plantsViewModel.savePlantToFireStore(userId, plant) }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_add_no_circle),
+                                contentDescription = null
+                            )
+                        }
                     }
                 }
             )

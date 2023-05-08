@@ -35,8 +35,8 @@ fun MyGardenScreen(navController: NavController, plantsViewModel: PlantsViewMode
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    plantsViewModel.getGardenPlants(userId)
-                    PlantCards(plants = plantsViewModel.gardenPlants, navController = navController)
+                    //val gardenPlants: List<Plant> by lazy { plantsViewModel.getGardenPlants(userId) }
+                    PlantCards(plants = plantsViewModel.getGardenPlants(userId), navController = navController, true)
                 }
             }
         }

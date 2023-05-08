@@ -38,6 +38,6 @@ fun PlantsSearchScreen(
             }
         )
         Spacer(modifier = Modifier.height(8.dp))
-        PlantCards(plants = plantsViewModel.plants, navController)
+        PlantCards(plants = plantsViewModel.plants, navController, false)
     }
 }

@@ -24,14 +24,14 @@ import com.example.foodcalculator.navigation.Screen
 import com.google.gson.Gson
 
 @Composable
-fun RecipeCards(recipes: List<Recipe>, navController: NavController) {
+fun RecipeCards(recipes: List<Recipe>, navController: NavController, fromMyRecipes: Boolean) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         items(recipes) {
             RecipeCard(
                 recipe = it,
                 onCardClick = { recipe ->
                     navController.navigate(
-                        Screen.RecipeDetails.route+"/recipe={recipe}"
+                        Screen.RecipeDetails.route+"/recipe={recipe}/fromMyRecipes=$fromMyRecipes"
                             .replace(
                                 oldValue = "{recipe}",
                                 newValue = Uri.encode(Gson().toJson(recipe)))

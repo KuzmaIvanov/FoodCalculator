@@ -37,7 +37,8 @@ fun RecipesSearchScreen(navController: NavController, recipesViewModel: RecipesV
         Spacer(modifier = Modifier.height(8.dp))
         RecipeCards(
             recipes = recipesViewModel.recipes,
-            navController = navController
+            navController = navController,
+            fromMyRecipes = false
         )
     }
 }

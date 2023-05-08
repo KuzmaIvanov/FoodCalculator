@@ -1,6 +1,7 @@
 package com.example.foodcalculator.data.remote.recipes
 
 data class Recipe(
+    val id: String,
     val label: String,
     val imageUrl: String,
     val dietLabels: List<String>,

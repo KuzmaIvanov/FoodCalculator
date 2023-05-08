@@ -138,7 +138,11 @@ fun Navigation(
                 )
             }
             composable(Screen.MyRecipes.route) {
-                Text(text = "This is a My Recipes Page")
+                MyRecipesScreen(
+                    navController = navController,
+                    recipesViewModel = recipesViewModel,
+                    userId = googleAuthUiClient.getSignedInUser()?.userId!!
+                )
             }
             composable(Screen.Search.route) {
                 RecipesSearchScreen(navController = navController, recipesViewModel = recipesViewModel)
@@ -175,30 +179,46 @@ fun Navigation(
                 FilterRecipeScreen(navController = navController, recipesViewModel = recipesViewModel, context = context)
             }
             composable(
-                route = Screen.RecipeDetails.route+"/recipe={recipe}",
-                arguments = listOf(navArgument("recipe") {
-                    type = NavType.StringType
-                    nullable = false
-                })
+                route = Screen.RecipeDetails.route+"/recipe={recipe}/fromMyRecipes={fromMyRecipes}",
+                arguments = listOf(
+                    navArgument("recipe") {
+                        type = NavType.StringType
+                        nullable = false
+                    },
+                    navArgument("fromMyRecipes") {
+                        type = NavType.BoolType
+                        nullable = false
+                    }
+                )
             ) {
                 RecipeDetailsScreen(
                     navController = navController,
-                    recipeAsJson = it.arguments?.getString("recipe")!!
+                    recipeAsJson = it.arguments?.getString("recipe")!!,
+                    googleAuthUiClient.getSignedInUser()?.userId!!,
+                    recipesViewModel,
+                    fromMyRecipes = it.arguments?.getBoolean("fromMyRecipes")!!
                 )
             }
             composable(
-                route = Screen.PlantDetails.route+"/plant={plant}",
-                arguments = listOf(navArgument("plant") {
-                    type = NavType.StringType
-                    nullable = false
-                })
+                route = Screen.PlantDetails.route+"/plant={plant}/fromGarden={fromGarden}",
+                arguments = listOf(
+                    navArgument("plant") {
+                        type = NavType.StringType
+                        nullable = false
+                    },
+                    navArgument("fromGarden") {
+                        type = NavType.BoolType
+                        nullable = false
+                    }
+                )
             ) {
                 PlantDetailsScreen(
                     navController = navController,
                     plantAsJson = it.arguments?.getString("plant")!!,
                     googleAuthUiClient.getSignedInUser()?.userId!!,
                     plantsViewModel,
-                    context
+                    context,
+                    fromGarden = it.arguments?.getBoolean("fromGarden")!!
                 )
             }
         }

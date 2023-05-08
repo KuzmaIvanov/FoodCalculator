@@ -15,11 +15,18 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.foodcalculator.R
 import com.example.foodcalculator.data.remote.recipes.Recipe
+import com.example.foodcalculator.viewmodel.RecipesViewModel
 import com.google.gson.Gson
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
-fun RecipeDetailsScreen(navController: NavController, recipeAsJson: String) {
+fun RecipeDetailsScreen(
+    navController: NavController,
+    recipeAsJson: String,
+    userId: String,
+    recipesViewModel: RecipesViewModel,
+    fromMyRecipes: Boolean
+) {
     val recipe = Gson().fromJson(recipeAsJson, Recipe::class.java)
     Scaffold(
         topBar = {
@@ -38,7 +45,24 @@ fun RecipeDetailsScreen(navController: NavController, recipeAsJson: String) {
                     }
                 },
                 actions = {
-
+                    if(fromMyRecipes) {
+                        IconButton(onClick = {
+                            recipesViewModel.deleteRecipeFromFireStore(userId, recipe.id)
+                            navController.navigateUp()
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_cancel),
+                                contentDescription = null
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = { recipesViewModel.saveRecipeToFireStore(userId, recipe) }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_add_no_circle),
+                                contentDescription = null
+                            )
+                        }
+                    }
                 }
             )
         },

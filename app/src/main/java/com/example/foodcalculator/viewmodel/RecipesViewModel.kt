@@ -13,15 +13,18 @@ import com.example.foodcalculator.data.repository.RecipesRepository
 import com.example.foodcalculator.other.Constants
 import com.example.foodcalculator.ui.components.FilterItem
 import com.example.foodcalculator.ui.screens.Ingredient
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.JsonObject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipesViewModel @Inject constructor(
-    private val recipesRepository: RecipesRepository
+    private val recipesRepository: RecipesRepository,
+    private val firestore: FirebaseFirestore
 ): ViewModel() {
     private val _recipes = listOf<Recipe>().toMutableStateList()
     val recipes: List<Recipe>
@@ -180,11 +183,23 @@ class RecipesViewModel @Inject constructor(
         return result
     }
 
+    private fun getRecipeIdFromHref(href: String): String {
+        val result = StringBuilder()
+        val hrefAfter = href.substringAfterLast("v2/")
+        var i = 0
+        while (hrefAfter[i] != '?') {
+            result.append(hrefAfter[i])
+            i++
+        }
+        return result.toString()
+    }
     private fun initializeRecipesFromJsonObject(jsonObject: JsonObject) {
         val hits = jsonObject.getAsJsonArray("hits")
         hits.forEach {
             val recipeAsJsonObject = it.asJsonObject.getAsJsonObject("recipe")
+            val selfAsJsonObject = it.asJsonObject.getAsJsonObject("_links").getAsJsonObject("self")
             _recipes.add(Recipe(
+                id = getRecipeIdFromHref(selfAsJsonObject.get("href").asString),
                 label = recipeAsJsonObject.get("label").asString,
                 imageUrl = recipeAsJsonObject.get("image").asString,
                 //imageUrl = recipeAsJsonObject.getAsJsonObject("images").getAsJsonObject("LARGE").get("url").asString,
@@ -244,5 +259,85 @@ class RecipesViewModel @Inject constructor(
         val iron = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "FE")
         val potassium = getInfoFromTotalNutrientsJsonObject(totalNutrientsJsonObject, "K")
         nutritionAnalysis.value = NutritionAnalysis(calories, totalWeight, fat, cholesterol, sodium, protein, vitaminD, calcium, iron, potassium)
+    }
+
+    fun saveRecipeToFireStore(userId: String, recipe: Recipe) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("users")
+                    .document(userId)
+                    .collection("recipes")
+                    .document(recipe.id)
+                    .set(
+                        hashMapOf(
+                            "id" to recipe.id,
+                            "label" to recipe.label,
+                            "imageUrl" to recipe.imageUrl,
+                            "dietLabels" to recipe.dietLabels,
+                            "healthLabels" to recipe.healthLabels,
+                            "ingredientLines" to recipe.ingredientLines,
+                            "calories" to recipe.calories,
+                            "totalWeight" to recipe.totalWeight,
+                            "totalTime" to recipe.totalTime,
+                            "cuisineType" to recipe.cuisineType,
+                            "mealType" to recipe.mealType,
+                            "dishType" to recipe.dishType,
+                            "yield" to recipe.yield
+                        )
+                    )
+                    .await()
+            } catch (e: Exception) {
+                Log.d("FIRESTORE", "Failed to save data: ${e.message}")
+            }
+        }
+    }
+
+    fun getMyRecipes(userId: String): SnapshotStateList<Recipe> {
+        val myRecipes = listOf<Recipe>().toMutableStateList()
+        firestore.collection("users")
+            .document(userId)
+            .collection("recipes")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val recipe = document.data
+                    myRecipes.add(
+                        Recipe(
+                            id = recipe["id"].toString(),
+                            label = recipe["label"].toString(),
+                            imageUrl = recipe["imageUrl"].toString(),
+                            dietLabels = recipe["dietLabels"] as List<String>,
+                            healthLabels = recipe["healthLabels"] as List<String>,
+                            ingredientLines = recipe["ingredientLines"] as List<String>,
+                            calories = (recipe["calories"] as Double).toFloat(),
+                            totalWeight = (recipe["totalWeight"] as Double).toFloat(),
+                            totalTime = (recipe["totalTime"] as Long).toInt(),
+                            cuisineType = recipe["cuisineType"] as List<String>,
+                            mealType = recipe["mealType"] as List<String>,
+                            dishType = recipe["dishType"] as List<String>,
+                            yield = (recipe["yield"] as Long).toInt()
+                        )
+                    )
+                }
+            }
+            .addOnFailureListener {
+                Log.d("FIRESTORE", "Failed to load data")
+            }
+        return myRecipes
+    }
+
+    fun deleteRecipeFromFireStore(userId: String, recipeId: String) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                firestore.collection("users")
+                    .document(userId)
+                    .collection("recipes")
+                    .document(recipeId)
+                    .delete()
+                    .await()
+            }
+        } catch (e: Exception) {
+            Log.d("FIRESTORE", "Failed to delete recipe")
+        }
     }
 }
